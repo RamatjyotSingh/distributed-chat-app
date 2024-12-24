@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <title>Chat Room</title>
+</head>
+<body>
+    
+    <div class="layout">
+        <div class="login-container">
+            <h1>Enter your Username</h1>
+            <input type="text" autocomplete="name" placeholder="Username" aria-label="Username" id="username">
+            <button onclick="join()">Join</button>
+        </div>
+        <div class="chat-container is-hidden">
+            <div class="chat-header">
+                <h1>Chat Room</h1>
+                <button onclick="leave()">Leave</button>
+            </div>
+            <div class="message-container">
+
+                   
+            </div>
+            <div class="chat-input">
+                <input type="text" placeholder="Type your message" aria-label="Type your message" id="message">
+                <button class = "send" onclick="send()">Send</button>
+            </div>
+        </div>
+    </div>
+   <script src="script.js"></script>
+</body>
+</html>

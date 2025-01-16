@@ -1,4 +1,3 @@
-
 # **Distributed Chat Application with Multi-threaded Web Server**
 
 ## **Overview**
@@ -73,6 +72,30 @@ This project consists of a multi-threaded web server and a real-time chat client
 
    ```sh
    python3 client.py --host localhost --port 8783
+   ```
+
+---
+
+## **Setting Up a Cron Job to Delete `chat.log`**
+
+1. **Make the `clean.sh` Script Executable**:
+   Run the following command to make the script executable:
+
+   ```sh
+   chmod +x clean.sh
+   ```
+
+2. **Set Up a Cron Job**:
+   Open the crontab file to set up a cron job:
+
+   ```sh
+   crontab -e
+   ```
+
+   Add the following line to the crontab file to run the script every hour:
+
+   ```sh
+   0 * * * * clean.sh
    ```
 
 ---

@@ -51,8 +51,9 @@ client_username = {} # Dictionary to store the username for each client
  # Get a random welcome message for a new user
 def get_random_welcome_message(username):
 
-    return random.choice(WELCOME_MESSAGES).format(username=username)
-
+    welcome_msg = random.choice(WELCOME_MESSAGES).format(username=username)
+ 
+    return welcome_msg
 # Get the most recent messages from the chat log DETERMINED BY NUM_RECENT_MESSAGES
 
 
@@ -457,7 +458,7 @@ def save_web_message(client):
     client.sendall("OK".encode())
     msg_len = client.recv(4).decode('utf-8')
     if not msg_len:
-        msg_len = 8024
+        msg_len = 1024
     msg_len = int(msg_len)
    
     message = client.recv(msg_len).decode().strip()
@@ -496,6 +497,10 @@ def get_web_username(client):
             print("Client no: " + str(n))
             welcome_msg = get_random_welcome_message(username)
             welcome_msg = {"message":welcome_msg}
+            log = json.dumps(welcome_msg)
+            
+            save_message(log, CHAT_LOG)
+
             client.sendall((json.dumps(welcome_msg)).encode('utf-8'))
           
             

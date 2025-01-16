@@ -162,7 +162,7 @@ def login(client, body):
         s.sendall(username.encode())
         welcome_msg = s.recv(1024).decode()
         send_header(client, "application/json", 200, "OK", {"Set-Cookie": f"Cookie={cookie}; Path=/; HttpOnly Secure"})
-        client.sendall(json.dumps({"message": welcome_msg}).encode())
+        client.sendall(json.dumps(welcome_msg).encode())
         s.close()
     else:
         print("Error: Expected USER header from chat server", res, "received")

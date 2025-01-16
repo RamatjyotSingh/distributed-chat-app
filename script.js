@@ -2,11 +2,12 @@
 
 let USERNAME = null ; 
 let lastMsgId = Date.now(); 
-const MSG_LIMIT = 30;
+
 
 
 function createMessage(username, timestamp, message,msgID) {
     if(!username && !timestamp && !msgID && message) {
+        console.log(message);
         createWelcomeMessage(message);
         return;
     }
@@ -58,14 +59,14 @@ function createMessage(username, timestamp, message,msgID) {
 document.addEventListener('DOMContentLoaded', function() {
      // Fetch the index.html file
      let xhrIndex = new XMLHttpRequest();
-     xhrIndex.open('GET', 'http://localhost:8784/');
+     xhrIndex.open('GET', '/');
      xhrIndex.onload = function() {
          if (xhrIndex.status === 200) {
              document.documentElement.innerHTML = xhrIndex.responseText;
              
              // After loading the index.html, check for cookies
              let xhrCookie = new XMLHttpRequest();
-             xhrCookie.open('GET', 'http://localhost:8784/chats/');
+             xhrCookie.open('GET', '/chats/');
              xhrCookie.setRequestHeader('Content-Type', 'application/json');
              xhrCookie.withCredentials = true; // Include cookies in the request
  
@@ -78,6 +79,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         USERNAME = response.username;
                         getMessages();
                      }
+
+                        addDeleteEvent();
                      
                  }
              };
@@ -96,11 +99,19 @@ document.addEventListener('DOMContentLoaded', function() {
  
      xhrIndex.send();
     // Select the parent container of chat messages
-    let messageContainer = document.querySelector('.message-container');
+   
 
+  
+
+}); 
+
+function addDeleteEvent(){
+
+    let messageContainer = document.querySelector('.message-container');
+    console.log(messageContainer);
     // Add event listener for right-click (contextmenu) on messages
     messageContainer.addEventListener('contextmenu', function(event) {
-
+        console.log('Right-clicked on the message container');
         let target = event.target;
 
         // Traverse up to find the .chat-message element
@@ -158,9 +169,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
    
 
-  
-
-}); 
+}
 function send() {
     if (!USERNAME) {
         alert('Please enter a username');
@@ -179,7 +188,7 @@ function send() {
     createMessage(USERNAME, timestamp, message, msgID);
 
     let xhr = new XMLHttpRequest();
-    xhr.open('POST', 'http://localhost:8784/api/messages');
+    xhr.open('POST', '/api/messages');
     xhr.setRequestHeader('Content-Type', 'application/json');
 
     xhr.withCredentials = true; // Include cookies in the request
@@ -207,7 +216,7 @@ function send() {
 
 function leave() {
     let xhr = new XMLHttpRequest();
-    xhr.open('DELETE', 'http://localhost:8784/api/login');
+    xhr.open('DELETE', '/api/login');
     xhr.setRequestHeader('Content-Type', 'application/json');
 
     xhr.withCredentials = true; // Include cookies in the request
@@ -238,27 +247,28 @@ function join() {
 
 
 function createWelcomeMessage(msg) {
-    msg =JSON.parse(msg);
+    
+   
     let welcomeMessage = document.createElement('p');
     welcomeMessage.classList.add('welcome-message');
-    welcomeMessage.innerText = msg['message'];
+    welcomeMessage.innerText = msg;
     document.querySelector('.message-container').appendChild(welcomeMessage);
 }
 
 function sendUsername() {
     let xhr = new XMLHttpRequest();
-    xhr.open('POST', 'http://localhost:8784/api/login');
+    xhr.open('POST', '/api/login');
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.withCredentials = true; // Include cookies in the request
 
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
-                console.log(xhr.responseText);
-                let response = JSON.parse(xhr.responseText);
-                let msg = response.message;
+                let res= JSON.parse(xhr.responseText);
+                console.log(res);
+                let welcomeMsg = res['message'];
+                console.log(welcomeMsg);
                 getMessages();
-                createWelcomeMessage(msg);
                 // Handle the response
             } else {
                 console.error('Error:', xhr.status, xhr.statusText);
@@ -268,6 +278,7 @@ function sendUsername() {
 
     xhr.send(JSON.stringify({ username: USERNAME }));
     console.log("Username sent");
+    
 }
 function appendMessages(messages) {
 
@@ -280,8 +291,8 @@ function appendMessages(messages) {
 
 function getMessages() {
     let xhr = new XMLHttpRequest();
-    // xhr.open('GET', `http://localhost:8784/api/messages?limit=${MSG_LIMIT}`);
-    xhr.open('GET', `http://localhost:8784/api/messages`);
+    // xhr.open('GET', `/api/messages?limit=${MSG_LIMIT}`);
+    xhr.open('GET', `/api/messages`);
     xhr.withCredentials = true; // Include cookies in the request
    // Handle successful response
     xhr.onload = function() {
@@ -293,6 +304,7 @@ function getMessages() {
             if (messages.length > 0){
                 appendMessages(messages);
             }
+
         } 
         else {
             console.error("Request completed but failed. Status:", xhr.status, "Status Text:", xhr.statusText);
@@ -310,7 +322,7 @@ function getMessages() {
 
 function getLastMessages(msgID) {
     let xhr = new XMLHttpRequest();
-    xhr.open('GET', 'http://localhost:8784/api/messages?last=' + encodeURIComponent(msgID));
+    xhr.open('GET', '/api/messages?last=' + encodeURIComponent(msgID));
     xhr.withCredentials = true; // Include cookies in the request
    // Handle successful response
     xhr.onload = function() {
@@ -321,10 +333,7 @@ function getLastMessages(msgID) {
             let messages = JSON.parse(xhr.responseText);
             console.log(messages);
             if(messages.length > 0){
-                messages.forEach(messages => {
-                    messages=(messages);
-                    createMessage(messages.username, messages.timestamp, messages.message,messages.id);
-                });
+                appendMessages(messages);
                 console.log(messages[messages.length - 1]);
             }
 
@@ -358,7 +367,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function deleteMessages(msgID) {
     let xhr = new XMLHttpRequest();
-    xhr.open('DELETE', `http://localhost:8784/api/messages?ID=${msgID}`);
+    xhr.open('DELETE', `/api/messages?ID=${msgID}`);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.withCredentials = true; // Include cookies in the request
 

@@ -227,8 +227,10 @@ function leave() {
     }
     xhr.send();
 
+
     document.querySelector('.login-container').classList.remove('is-hidden');
     document.querySelector('.chat-container').classList.add('is-hidden');
+    document.querySelector('.message-container').innerHTML = '';
 }
 
 function join() {

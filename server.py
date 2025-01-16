@@ -564,6 +564,7 @@ def search_chat_log(filename, id):
         try:
             obj = json.loads(line)
             if 'id' in obj and obj['id'] > id:
+                obj = json.dumps(obj)
                 results.appendleft(obj)  # Add to the front of the deque
         except json.JSONDecodeError:
             print(f"Invalid JSON in chat log: {line}")

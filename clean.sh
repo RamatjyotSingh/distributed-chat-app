@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Path to the chat.log file
-LOG_FILE="chat.log"
+LOG_FILE="/home/student/singhr62/distributed-chat-app/chat.log"
 
 # Check if the file exists and delete it
 if [ -f "$LOG_FILE" ]; then

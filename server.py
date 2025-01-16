@@ -17,7 +17,7 @@ import random
 import time
 from collections import deque
 import os
-import psutil  
+# import psutil  
 import queue
 from datetime import datetime
 n = 0
@@ -330,59 +330,59 @@ def handle_client_messages(client):
 
 
 #techincal stuff to log the system metrics for server analysis
-def log_system_metrics():
-    # Take initial snapshot
-    net_io_start = psutil.net_io_counters()
-    bytes_sent_start = net_io_start.bytes_sent
-    bytes_recv_start = net_io_start.bytes_recv
+# def log_system_metrics():
+#     # Take initial snapshot
+#     net_io_start = psutil.net_io_counters()
+#     bytes_sent_start = net_io_start.bytes_sent
+#     bytes_recv_start = net_io_start.bytes_recv
 
-    # Wait for a short period
-    time.sleep(1)
+#     # Wait for a short period
+#     time.sleep(1)
 
-    # Take final snapshot
-    net_io_end = psutil.net_io_counters()
-    bytes_sent_end = net_io_end.bytes_sent
-    bytes_recv_end = net_io_end.bytes_recv
+#     # Take final snapshot
+#     net_io_end = psutil.net_io_counters()
+#     bytes_sent_end = net_io_end.bytes_sent
+#     bytes_recv_end = net_io_end.bytes_recv
 
-    # Calculate the difference
-    bytes_sent = bytes_sent_end - bytes_sent_start
-    bytes_recv = bytes_recv_end - bytes_recv_start
+#     # Calculate the difference
+#     bytes_sent = bytes_sent_end - bytes_sent_start
+#     bytes_recv = bytes_recv_end - bytes_recv_start
 
-    # Convert to KB
-    bytes_sent_kb = bytes_sent / 1024
-    bytes_recv_kb = bytes_recv / 1024
+#     # Convert to KB
+#     bytes_sent_kb = bytes_sent / 1024
+#     bytes_recv_kb = bytes_recv / 1024
 
-    cpu_usage = psutil.cpu_percent(interval=1)
-    memory_info = psutil.virtual_memory()
-    disk_usage = psutil.disk_usage('./')
-    load_avg = os.getloadavg()
+#     cpu_usage = psutil.cpu_percent(interval=1)
+#     memory_info = psutil.virtual_memory()
+#     disk_usage = psutil.disk_usage('./')
+#     load_avg = os.getloadavg()
 
-    # Get CPU temperature
-    try:
-        temps = psutil.sensors_temperatures()
-        if not temps:
-            cpu_temp = "N/A"
-        else:
-            # Assuming 'coretemp' is the key for CPU temperature
-            cpu_temp = temps['coretemp'][0].current
-    except AttributeError:
-        cpu_temp = "N/A"  # psutil.sensors_temperatures() is not available on this system
+#     # Get CPU temperature
+#     try:
+#         temps = psutil.sensors_temperatures()
+#         if not temps:
+#             cpu_temp = "N/A"
+#         else:
+#             # Assuming 'coretemp' is the key for CPU temperature
+#             cpu_temp = temps['coretemp'][0].current
+#     except AttributeError:
+#         cpu_temp = "N/A"  # psutil.sensors_temperatures() is not available on this system
 
-    log_message = (
-        f"Timestamp: {time.strftime('%Y-%m-%d %H:%M:%S')}\n"
-        f"CPU Usage: {cpu_usage}%\n"
-        f"Memory Usage: {memory_info.percent}%\n"
-        f"Available Memory: {memory_info.available / (1024 ** 2)} MB\n"
-        f"Disk Usage: {disk_usage.percent}%\n"
-        f"Network Sent: {bytes_sent_kb:.2f} KB\n"
-        f"Network Received: {bytes_recv_kb:.2f} KB\n"
-        f"Load Average: {load_avg}\n"
-        f"CPU Temperature: {cpu_temp}°C\n"
-        f"Number of Active Clients: {len(clients)}\n"
-    )
+#     log_message = (
+#         f"Timestamp: {time.strftime('%Y-%m-%d %H:%M:%S')}\n"
+#         f"CPU Usage: {cpu_usage}%\n"
+#         f"Memory Usage: {memory_info.percent}%\n"
+#         f"Available Memory: {memory_info.available / (1024 ** 2)} MB\n"
+#         f"Disk Usage: {disk_usage.percent}%\n"
+#         f"Network Sent: {bytes_sent_kb:.2f} KB\n"
+#         f"Network Received: {bytes_recv_kb:.2f} KB\n"
+#         f"Load Average: {load_avg}\n"
+#         f"CPU Temperature: {cpu_temp}°C\n"
+#         f"Number of Active Clients: {len(clients)}\n"
+#     )
 
-    with open("system_metrics.log", "a") as log_file:
-        log_file.write(log_message + "\n")
+#     with open("system_metrics.log", "a") as log_file:
+#         log_file.write(log_message + "\n")
 
 #initialise the connection with the client
 def init_client_connection(s,w):
@@ -391,15 +391,15 @@ def init_client_connection(s,w):
     global msg_sent
     global msg_received
 
-    last_log_time = time.time()
+    # last_log_time = time.time()
 
-    log_interval = 5  # Log every 5 seconds
+    # log_interval = 5  # Log every 5 seconds
     try:
         while True:
-            current_time = time.time()
-            if current_time - last_log_time >= log_interval:
-                log_system_metrics()
-                last_log_time = current_time
+            # current_time = time.time()
+            # if current_time - last_log_time >= log_interval:
+            #     log_system_metrics()
+            #     last_log_time = current_time
 
             # Monitor sockets for incoming connections or data
             inputs = [s] + clients + [w] + w_clients

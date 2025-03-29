@@ -138,7 +138,3 @@ Ramatjyot Singh
 
 ---
 
-## **See it Live!**
-
-Open incognito mode in your favorite browser and go to [http://osprey.cs.umanitoba.ca:8784](http://osprey.cs.umanitoba.ca:8784).  
-Note: It doesn't support secure connections yet, so it won't open in normal mode.
